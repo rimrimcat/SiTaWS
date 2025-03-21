@@ -31,27 +31,6 @@ async function loadSettings() {
     .trigger("input");
 }
 
-// // This function is called when the extension settings are changed in the UI
-// function onExampleInput(event) {
-//   const value = Boolean($(event.target).prop("checked"));
-//   extension_settings[extensionName].example_setting = value;
-//   saveSettingsDebounced();
-// }
-
-// // This function is called when the button is clicked
-// function onButtonClick() {
-//   // You can do whatever you want here
-//   // Let's make a popup appear with the checked setting
-//   toastr.info(
-//     `The checkbox is ${
-//       extension_settings[extensionName].example_setting
-//         ? "checked"
-//         : "not checked"
-//     }`,
-//     "A popup appeared because you clicked the button!"
-//   );
-// }
-
 function testEndpoint() {
   const resultElement = document.getElementById("endpoint_test_result");
   resultElement.innerHTML = "";
@@ -62,8 +41,7 @@ function testEndpoint() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: "John",
-      email: "john@example.com",
+      passed_test: "yes",
     }),
   })
     .then((response) => {
