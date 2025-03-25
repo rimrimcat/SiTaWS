@@ -9,35 +9,96 @@
       ></div>
     </div>
     <div class="inline-drawer-content">
-      <!-- <div class="example-extension_block flex-container">
+      <!-- TODO: USE THIS INSTEAD OF THE OLD ENABLE ONE -->
+      <label for="ws_enabled" class="checkbox_label">
         <input
-          id="my_button"
-          class="menu_button"
-          type="submit"
-          value="Example Button"
+          name="ws_enabled"
+          id="enable_websocket"
+          class="checkbox"
+          type="checkbox"
         />
-      </div> -->
+        <small data-i18n="ws_enabled">Enabled</small>
+      </label>
 
-      <!-- Test Endpoint Button -->
-      <div class="example-extension_block flex-container">
-        <input
-          id="test_endpoint_button"
-          class="menu_button"
-          type="submit"
-          value="Test Endpoint"
-        />
-        <span
-          id="endpoint_test_result"
-          style="margin-left: 10px; display: flex; align-items: center"
-        ></span>
+      <hr />
+
+      <!-- <div class="example-extension_block flex-container"> -->
+      <div class="flex-container">
+        <div class="flex-container flex1 flexFlowColumn">WebSocket Port</div>
+        <div class="flex-container flex1 flexFlowColumn">
+          <input
+            id="websocket_port_input"
+            class="text_pole"
+            min="0"
+            max="10000"
+            type="number"
+          />
+        </div>
       </div>
+      <!-- </div> -->
 
-      <!-- <div class="example-extension_block flex-container">
-        <input id="example_setting" type="checkbox" />
-        <label for="example_setting">This is an example</label>
-      </div> -->
+      <!-- <div class="flex-container">
+          <label class="checkbox_label">
+            <span>Enable WebSocket</span>
+            <input id="enable_websocket" type="checkbox" />
+          </label>
+        </div> -->
+
+      <div class="example-extension_block flex-container">
+        <div class="flex-container">
+          <div id="ws_connection_status" class="disconnected">
+            🔴 Disconnected
+          </div>
+        </div>
+      </div>
 
       <hr class="sysHR" />
     </div>
   </div>
 </div>
+
+<style>
+  .xapi-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .flex-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  #ws_connection_status {
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  #ws_connection_status.connected {
+    color: #4caf50;
+  }
+
+  #ws_connection_status.disconnected {
+    color: #f44336;
+  }
+
+  .xapi-message {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-left: 3px solid #666;
+  }
+
+  .xapi-message.system {
+    border-left-color: #2196f3;
+  }
+
+  .xapi-message.error {
+    border-left-color: #f44336;
+  }
+
+  .xapi-message.notification {
+    border-left-color: #4caf50;
+  }
+</style>

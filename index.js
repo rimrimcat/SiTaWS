@@ -11,55 +11,36 @@ import {
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced } from "../../../../script.js";
 
-// Keep track of where your extension is located, name should match repo name
-const extensionName = "st-xapi";
-const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
-const extensionSettings = extension_settings[extensionName];
-const defaultSettings = {};
+import {
+  initWebSocket,
+  stopWebSocket,
+  updateWSConnectionStatus,
+} from "./client-ws.js";
 
-// Loads the extension settings if they exist, otherwise initializes them to the defaults.
-async function loadSettings() {
-  //Create the settings if they don't exist
-  extension_settings[extensionName] = extension_settings[extensionName] || {};
-  if (Object.keys(extension_settings[extensionName]).length === 0) {
-    Object.assign(extension_settings[extensionName], defaultSettings);
+import {
+  extensionName,
+  extensionFolderPath,
+  loadSettings,
+} from "./settings.js";
+
+// Toggle WebSocket connection
+function toggleWebSocket() {
+  const enabled = $("#enable_websocket").prop("checked");
+  extension_settings[extensionName].enable_websocket = enabled;
+  saveSettingsDebounced();
+
+  if (enabled) {
+    initWebSocket();
+  } else {
+    stopWebSocket();
+    updateWSConnectionStatus(false);
   }
-
-  // Updating settings in the UI
-  $("#example_setting")
-    .prop("checked", extension_settings[extensionName].example_setting)
-    .trigger("input");
 }
 
-function testEndpoint() {
-  const resultElement = document.getElementById("endpoint_test_result");
-  resultElement.innerHTML = "";
-
-  fetch("/xapi/test", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      passed_test: "yes",
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      // Show success icon (check mark)
-      resultElement.innerHTML = "✅";
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      // Show failure icon (cross)
-      resultElement.innerHTML = "❌";
-    });
+function updateWebSocketPort() {
+  const port = $("#websocket_port_input").val();
+  extension_settings[extensionName].websocket_port = port;
+  saveSettingsDebounced();
 }
 
 // This function is called when the extension is loaded
@@ -73,12 +54,12 @@ jQuery(async () => {
   // Left should be extensions that deal with system functions and right should be visual/UI related
   $("#extensions_settings").append(settingsHtml);
 
-  // These are examples of listening for events
-  // $("#my_button").on("click", onButtonClick);
-  // $("#example_setting").on("input", onExampleInput);
+  // Event listeners
+  $("#enable_websocket").on("input", toggleWebSocket);
+  $("#websocket_port_input").on("input", updateWebSocketPort);
 
-  $("#test_endpoint_button").on("click", testEndpoint);
+  // $("#ws_test_button").on("click", sendWebSocketTest);
 
-  // Load settings when starting things up (if you have any)
+  // Load settings when starting things up
   loadSettings();
 });
