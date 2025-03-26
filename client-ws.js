@@ -4,6 +4,7 @@ import {
     getRequestHeaders,
     setUserName,
     saveSettingsDebounced,
+    getRequestHeaders,
 } from "../../../../script.js";
 
 import { initPersona, user_avatar, setUserAvatar } from "../../../personas.js";
@@ -156,6 +157,11 @@ function handleWebSocketMessage(message) {
             successReply(message);
             break;
 
+        case "get_headers":
+            get_headers(message).catch((error) => {
+                failReply(message, error.message);
+            });
+            break;
         case "get_personas":
             get_personas(message).catch((error) => {
                 failReply(message, error.message);
@@ -178,7 +184,7 @@ function handleWebSocketMessage(message) {
             break;
 
         default:
-            console.log("Unknown message type:", message.type);
+            console.error("Unknown message type:", message.type);
     }
 }
 
@@ -315,31 +321,38 @@ async function delete_persona(message) {
     }
 }
 
-async function get_characters(message) {
-    // for DMs
-    $(document).ready(function () {
-        var characters = [];
-
-        // Loop through each character select element
-        $(".character_select").each(function () {
-            // Extract the character name
-            var characterName = $(this).find(".ch_name").text().trim();
-
-            // Extract the chid value from the data attribute
-            var chid = $(this).data("chid");
-
-            // Store the result in the array
-            characters.push({ name: characterName, chid: chid });
-        });
-
-        // Output the list (you can log it or process it further)
-        console.log(characters);
+async function get_headers(message) {
+    const headers = getRequestHeaders();
+    successReply(message, {
+        headers: headers,
     });
-
-    // [
-    //     { name: "Assistant", chid: 0 },
-    //     { name: "Coding Sensei", chid: 1 },
-    //     { name: "Rim", chid: 2 },
-    //     { name: "Seraphina", chid: 3 },
-    // ];
 }
+
+// async function get_chats(message) {
+//     // for DMs
+//     $(document).ready(function () {
+//         var characters = [];
+
+//         // Loop through each character select element
+//         $(".character_select").each(function () {
+//             // Extract the character name
+//             var characterName = $(this).find(".ch_name").text().trim();
+
+//             // Extract the chid value from the data attribute
+//             var chid = $(this).data("chid");
+
+//             // Store the result in the array
+//             characters.push({ name: characterName, chid: chid });
+//         });
+
+//         // Output the list (you can log it or process it further)
+//         console.log(characters);
+//     });
+
+//     // [
+//     //     { name: "Assistant", chid: 0 },
+//     //     { name: "Coding Sensei", chid: 1 },
+//     //     { name: "Rim", chid: 2 },
+//     //     { name: "Seraphina", chid: 3 },
+//     // ];
+// }
