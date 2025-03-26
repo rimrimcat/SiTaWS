@@ -4,7 +4,6 @@ import {
     getRequestHeaders,
     setUserName,
     saveSettingsDebounced,
-    getRequestHeaders,
 } from "../../../../script.js";
 
 import { initPersona, user_avatar, setUserAvatar } from "../../../personas.js";
